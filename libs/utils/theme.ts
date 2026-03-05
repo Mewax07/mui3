@@ -84,10 +84,14 @@ export interface ThemeTypography {
 
 export interface ThemeBorderRadius {
     none: number;
+    xs: number;
     sm: number;
     md: number;
     lg: number;
+    lg_inc: number;
     xl: number;
+    xl_inc: number;
+    xxl: number;
     full: number;
     [key: string]: number;
 }
@@ -245,10 +249,14 @@ export class ThemeManager {
             },
             borderRadius: {
                 none: 0,
-                sm: 4,
-                md: 8,
-                lg: 12,
-                xl: 16,
+                xs: 4,
+                sm: 8,
+                md: 12,
+                lg: 16,
+                lg_inc: 20,
+                xl: 28,
+                xl_inc: 32,
+                xxl: 48,
                 full: 9999,
             },
             shadows: {

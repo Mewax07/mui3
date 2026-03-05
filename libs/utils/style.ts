@@ -76,6 +76,7 @@ export class Style {
         property:
             | "p"
             | "m"
+            | "pi"
             | "pt"
             | "pr"
             | "pb"
@@ -88,8 +89,7 @@ export class Style {
             | "py"
             | "mx"
             | "my"
-            | "gap"
-            | "padding-inline",
+            | "gap",
     ): this {
         if (!this.hasTheme()) {
             console.warn("No theme attached to this Style instance");
@@ -310,6 +310,10 @@ export class Style {
     // SPACING - Padding
     p(value: CSSValue, unit?: CSSUnit): this {
         return this.addRule("padding", value, unit || "px");
+    }
+
+    pi(value: CSSValue, unit?: CSSUnit): this {
+        return this.addRule("padding-inline", value, unit || "px");
     }
 
     pt(value: CSSValue, unit?: CSSUnit): this {

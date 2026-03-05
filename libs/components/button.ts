@@ -2,7 +2,7 @@ import { Component } from "../utils/component";
 import { prop } from "../utils/decorator";
 import { Html } from "../utils/html";
 import { Style } from "../utils/style";
-import { ThemeManager } from "../utils/theme";
+import { darkTheme, ThemeManager } from "../utils/theme";
 import { WithEnumMethod, WithPropMethods } from "../utils/types";
 
 enum ButtonType {
@@ -43,12 +43,23 @@ export class Button extends Component {
 
     private initStyles() {
         new Style(".btn")
+            .withTheme(darkTheme)
+            .themeFontSize("lg")
             .themeSpace("sm", "gap")
-            .themeSpace("md", "padding-inline")
+            .themeSpace("md", "pi")
             .themeBgColor("primary")
             .themeColor("on_primary")
+            .themeRadius("md")
+            .cursor("pointer")
+            .position("relative")
             .w("max-content")
             .h(40)
+            .border(1, "solid", "transparent")
+            .display("flex")
+            .alignItems("center")
+            .justifyContent("center")
+            .bgRepeat("no-repeat")
+            .bgPosition("center")
             .apply();
     }
 
