@@ -5,7 +5,7 @@ import { Style } from "../utils/style";
 import { darkTheme, ThemeManager } from "../utils/theme";
 import { WithEnumMethod, WithPropMethods } from "../utils/types";
 
-enum ButtonType {
+export enum ButtonType {
     ELEVATED = "elevated",
     FILLED = "filled",
     TONAL = "tonal",
@@ -22,6 +22,74 @@ export interface Button
         WithPropMethods<ButtonProps, Button>,
         WithEnumMethod<"type", ButtonType, Button> {}
 
+new Style(".btn")
+    .withTheme(darkTheme)
+    .themeFontSize("lg")
+    .themeSpace("sm", "gap")
+    .themeSpace("md", "pi")
+    .themeBgColor("primary")
+    .themeColor("on_primary")
+    .themeRadius("md")
+    .cursor("pointer")
+    .position("relative")
+    .w("max-content")
+    .h(40)
+    .border(1, "solid", "transparent")
+    .display("flex")
+    .alignItems("center")
+    .justifyContent("center")
+    .bgRepeat("no-repeat")
+    .bgPosition("center")
+    .apply();
+
+new Style(".btn--elevated")
+    .withTheme(darkTheme)
+    .themeBgColor("surface_container_lowest")
+    .themeColor("primary")
+    .hover((hover) => {
+        hover.bgColor("color-mix(in srgb, currentColor 8%, transparent)");
+    })
+    .apply();
+
+new Style(".btn--filled")
+    .withTheme(darkTheme)
+    .themeBgColor("primary")
+    .themeColor("on_primary")
+    .hover((hover) => {
+        hover.bgColor("color-mix(in srgb, $primary$ 92%, transparent)");
+    })
+    .apply();
+
+new Style(".btn--tonal")
+    .withTheme(darkTheme)
+    .themeBgColor("secondary_container")
+    .themeColor("on_secondary_container")
+    .hover((hover) => {
+        hover.bgColor(
+            "color-mix(in srgb, currentColor 8%, $secondary_container$)",
+        );
+    })
+    .apply();
+
+new Style(".btn--text")
+    .withTheme(darkTheme)
+    .bg("transparent")
+    .themeColor("primary")
+    .hover((hover) => {
+        hover.bgColor("color-mix(in srgb, currentColor 8%, transparent)");
+    })
+    .apply();
+
+new Style(".btn--outlined")
+    .withTheme(darkTheme)
+    .bg("transparent")
+    .themeColor("on_surface_variant")
+    .themeBorderColor("outline_variant")
+    .hover((hover) => {
+        hover.bgColor("color-mix(in srgb, currentColor 8%, transparent)");
+    })
+    .apply();
+
 export class Button extends Component {
     private static theme = new ThemeManager();
 
@@ -33,47 +101,15 @@ export class Button extends Component {
     @prop("string")
     private label: string = "text";
 
-    constructor(theme?: ThemeManager) {
+    constructor() {
         super();
-        if (theme) {
-            Button.theme = theme;
-        }
-        this.initStyles();
-    }
-
-    private initStyles() {
-        new Style(".btn")
-            .withTheme(darkTheme)
-            .themeFontSize("lg")
-            .themeSpace("sm", "gap")
-            .themeSpace("md", "pi")
-            .themeBgColor("primary")
-            .themeColor("on_primary")
-            .themeRadius("md")
-            .cursor("pointer")
-            .position("relative")
-            .w("max-content")
-            .h(40)
-            .border(1, "solid", "transparent")
-            .display("flex")
-            .alignItems("center")
-            .justifyContent("center")
-            .bgRepeat("no-repeat")
-            .bgPosition("center")
-            .apply();
     }
 
     protected template(): Html {
-        const container = new Html("button").class("btn").text(this.label);
+        const container = new Html("button")
+            .class("btn", `btn--${this.type}`)
+            .text(this.label);
 
         return container;
-    }
-
-    static setTheme(theme: ThemeManager): void {
-        Button.theme = theme;
-    }
-
-    static getTheme(): ThemeManager {
-        return Button.theme;
     }
 }

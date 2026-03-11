@@ -20,7 +20,8 @@ type CSSUnit =
     | "vmin"
     | "vmax"
     | "ch"
-    | "ex";
+    | "ex"
+    | "deg";
 
 interface StyleRules {
     [selector: string]: Record<string, string>;
@@ -36,9 +37,47 @@ export class Style {
     private static styleElement: HTMLStyleElement | null = null;
     private themeManager: ThemeManager | null = null;
 
-    constructor(selector: string, theme?: ThemeManager) {
+    constructor(selector: string, theme?: ThemeManager | null) {
         this.selector = selector;
         this.themeManager = theme || null;
+    }
+
+    private resolveVariables(value: string): string {
+        if (!this.hasTheme()) return value;
+
+        const variablePattern = /\$([a-zA-Z0-9_.-]+)\$/g;
+
+        return value.replace(variablePattern, (match, varName) => {
+            try {
+                const colorValue = this.themeManager!.color(varName);
+                if (colorValue && colorValue !== varName) {
+                    return colorValue;
+                }
+            } catch {}
+
+            const spaceValue = this.themeManager!.spacing[varName];
+            if (spaceValue !== undefined) {
+                return `${spaceValue}px`;
+            }
+
+            const shadowValue = this.themeManager!.shadows[varName];
+            if (shadowValue) {
+                return shadowValue;
+            }
+
+            const radiusValue = this.themeManager!.borderRadius[varName];
+            if (radiusValue !== undefined) {
+                return `${radiusValue}px`;
+            }
+
+            const customValue = this.themeManager!.custom(varName);
+            if (customValue !== undefined) {
+                return customValue.toString();
+            }
+
+            console.warn(`Variable "${varName}" not found in theme`);
+            return match;
+        });
     }
 
     // THEME MANAGEMENT
@@ -69,6 +108,14 @@ export class Style {
             return this;
         }
         return this.bgColor(this.themeManager!.color(key));
+    }
+
+    themeBorderColor(key: keyof ThemeColors): this {
+        if (!this.hasTheme()) {
+            console.warn("No theme attached to this Style instance");
+            return this;
+        }
+        return this.borderColor(this.themeManager!.color(key));
     }
 
     themeSpace(
@@ -163,7 +210,12 @@ export class Style {
     }
 
     private addRule(property: string, value: CSSValue, unit?: CSSUnit): this {
-        const finalValue = unit ? this.addUnit(value, unit) : value.toString();
+        let finalValue = unit ? this.addUnit(value, unit) : value.toString();
+
+        if (this.hasTheme()) {
+            finalValue = this.resolveVariables(finalValue);
+        }
+
         this.rules[property] = finalValue;
         return this;
     }
@@ -727,45 +779,94 @@ export class Style {
 
     // PSEUDO STATES
     hover(callback: (style: Style) => void): this {
-        const hoverStyle = new Style(this.selector);
+        const hoverStyle = new Style(this.selector, this.themeManager);
         callback(hoverStyle);
-        this.pseudoStates.set(":hover", hoverStyle.rules);
+
+        // Résoudre les variables dans les règles du hover
+        const resolvedRules: Record<string, string> = {};
+        for (const [prop, value] of Object.entries(hoverStyle.rules)) {
+            resolvedRules[prop] = this.hasTheme()
+                ? this.resolveVariables(value)
+                : value;
+        }
+
+        this.pseudoStates.set(":hover", resolvedRules);
         return this;
     }
 
     focus(callback: (style: Style) => void): this {
-        const focusStyle = new Style(this.selector);
+        const focusStyle = new Style(this.selector, this.themeManager);
         callback(focusStyle);
-        this.pseudoStates.set(":focus", focusStyle.rules);
+
+        const resolvedRules: Record<string, string> = {};
+        for (const [prop, value] of Object.entries(focusStyle.rules)) {
+            resolvedRules[prop] = this.hasTheme()
+                ? this.resolveVariables(value)
+                : value;
+        }
+
+        this.pseudoStates.set(":focus", resolvedRules);
         return this;
     }
 
     active(callback: (style: Style) => void): this {
-        const activeStyle = new Style(this.selector);
+        const activeStyle = new Style(this.selector, this.themeManager);
         callback(activeStyle);
-        this.pseudoStates.set(":active", activeStyle.rules);
+
+        const resolvedRules: Record<string, string> = {};
+        for (const [prop, value] of Object.entries(activeStyle.rules)) {
+            resolvedRules[prop] = this.hasTheme()
+                ? this.resolveVariables(value)
+                : value;
+        }
+
+        this.pseudoStates.set(":active", resolvedRules);
         return this;
     }
 
     before(callback: (style: Style) => void): this {
-        const beforeStyle = new Style(this.selector);
+        const beforeStyle = new Style(this.selector, this.themeManager);
         callback(beforeStyle);
-        this.pseudoStates.set("::before", beforeStyle.rules);
+
+        const resolvedRules: Record<string, string> = {};
+        for (const [prop, value] of Object.entries(beforeStyle.rules)) {
+            resolvedRules[prop] = this.hasTheme()
+                ? this.resolveVariables(value)
+                : value;
+        }
+
+        this.pseudoStates.set("::before", resolvedRules);
         return this;
     }
 
     after(callback: (style: Style) => void): this {
-        const afterStyle = new Style(this.selector);
+        const afterStyle = new Style(this.selector, this.themeManager);
         callback(afterStyle);
-        this.pseudoStates.set("::after", afterStyle.rules);
+
+        const resolvedRules: Record<string, string> = {};
+        for (const [prop, value] of Object.entries(afterStyle.rules)) {
+            resolvedRules[prop] = this.hasTheme()
+                ? this.resolveVariables(value)
+                : value;
+        }
+
+        this.pseudoStates.set("::after", resolvedRules);
         return this;
     }
 
     // CHILD SELECTORS
     child(selector: string, callback: (style: Style) => void): this {
-        const childStyle = new Style(selector);
+        const childStyle = new Style(selector, this.themeManager);
         callback(childStyle);
-        this.children.set(` ${selector}`, childStyle.rules);
+
+        const resolvedRules: Record<string, string> = {};
+        for (const [prop, value] of Object.entries(childStyle.rules)) {
+            resolvedRules[prop] = this.hasTheme()
+                ? this.resolveVariables(value)
+                : value;
+        }
+
+        this.children.set(` ${selector}`, resolvedRules);
         return this;
     }
 
@@ -795,8 +896,15 @@ export class Style {
 
     // RAW CSS
     raw(property: string, value: string): this {
-        this.rules[property] = value;
+        const resolvedValue = this.hasTheme()
+            ? this.resolveVariables(value)
+            : value;
+        this.rules[property] = resolvedValue;
         return this;
+    }
+
+    var(property: string, value: string): this {
+        return this.raw(property, value);
     }
 
     css(styles: Record<string, string>): this {

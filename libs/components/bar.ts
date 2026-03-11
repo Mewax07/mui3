@@ -4,7 +4,7 @@ import { Html } from "../utils/html";
 import { WithEnumMethod, WithPropMethods } from "../utils/types";
 import { Button } from "./button";
 
-enum AppsBarType {
+export enum AppsBarType {
     SEARCH = "search",
     LARGE = "large",
     MEDIUM = "medium",
@@ -112,7 +112,8 @@ export class AppsBar extends Component {
             console.log(action);
             if (action instanceof Component) {
                 actionsSections.append(action.mount());
-            } else if (action instanceof Html) {
+            }
+            if (action instanceof Html) {
                 actionsSections.append(action);
             }
         });
@@ -172,7 +173,8 @@ export class AppsBar extends Component {
         this.actions.forEach((action) => {
             if (action instanceof Component) {
                 actionsSlot.append(action.mount());
-            } else if (action instanceof Html) {
+            }
+            if (action instanceof Html) {
                 actionsSlot.append(action);
             }
         });
