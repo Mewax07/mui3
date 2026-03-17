@@ -1,7 +1,11 @@
 import { Component } from "../utils/component";
 import { placeholder, prop } from "../utils/decorator";
 import { Html } from "../utils/html";
-import { WithEnumMethod, WithPropMethods } from "../utils/types";
+import {
+    WithEnumMethod,
+    WithPlaceholderMethods,
+    WithPropMethods,
+} from "../utils/types";
 import { Button } from "./button";
 
 export enum AppsBarType {
@@ -19,10 +23,16 @@ interface AppsBarProps {
     actions: Component[];
 }
 
+interface AppsBarSlots {
+    icon: { type: "icon" };
+    actions: { type: "icon" };
+}
+
 export interface AppsBar
     extends
         WithPropMethods<AppsBarProps, AppsBar>,
-        WithEnumMethod<"type", AppsBarType, AppsBar> {}
+        WithEnumMethod<"type", AppsBarType, AppsBar>,
+        WithPlaceholderMethods<AppsBarSlots, Button> {}
 
 export class AppsBar extends Component {
     @prop("enum", {
@@ -36,15 +46,6 @@ export class AppsBar extends Component {
     @prop("string")
     private subtitle: string = "Subtitle";
 
-    @prop("string")
-    private icon: string = "arrow-left";
-
-    @prop("boolean")
-    private showBackButton: boolean = true;
-
-    @prop("array")
-    private actions: Component[] = [];
-
     @placeholder("icon")
     private iconSlot?: Html;
 
@@ -53,13 +54,6 @@ export class AppsBar extends Component {
 
     constructor() {
         super();
-        this.init();
-    }
-
-    private init() {
-        const defaulButton = new Button().setLabel("+");
-
-        this.actions = [defaulButton];
     }
 
     protected template(): Html {
@@ -67,18 +61,18 @@ export class AppsBar extends Component {
 
         const content = new Html().class("content");
 
-        if (this.showBackButton) {
-            const backButton = new Html("button")
-                .class("back")
-                .attr("aria-label", "Back")
-                .append(
-                    new Html()
-                        .dataset("slot", "iconSlot")
-                        .append(Html.i().icon("arrow_back")),
-                );
+        // if (this.showBackButton) {
+        //     const backButton = new Html("button")
+        //         .class("back")
+        //         .attr("aria-label", "Back")
+        //         .append(
+        //             new Html()
+        //                 .dataset("slot", "iconSlot")
+        //                 .append(Html.i().icon("arrow_back")),
+        //         );
 
-            content.append(backButton);
-        }
+        //     content.append(backButton);
+        // }
 
         const titleSection = new Html().class("text-section");
 
@@ -108,15 +102,15 @@ export class AppsBar extends Component {
             .class("actions")
             .attr("data-slot", "actionsSlot");
 
-        this.actions.forEach((action) => {
-            console.log(action);
-            if (action instanceof Component) {
-                actionsSections.append(action.mount());
-            }
-            if (action instanceof Html) {
-                actionsSections.append(action);
-            }
-        });
+        // this.actions.forEach((action) => {
+        //     console.log(action);
+        //     if (action instanceof Component) {
+        //         actionsSections.append(action.mount());
+        //     }
+        //     if (action instanceof Html) {
+        //         actionsSections.append(action);
+        //     }
+        // });
 
         content.append(actionsSections);
         container.append(content);

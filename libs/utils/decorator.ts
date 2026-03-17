@@ -1,6 +1,5 @@
 import {
     ComponentMetadata,
-    PlaceholderMetadata,
     PlaceholderType,
     PropertyMetadata,
     PropertyType,

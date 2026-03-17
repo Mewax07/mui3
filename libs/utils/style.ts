@@ -1,4 +1,5 @@
 import {
+    ThemeAnimations,
     ThemeBorderRadius,
     ThemeColors,
     ThemeManager,
@@ -119,7 +120,10 @@ export class Style {
                 }
             } catch {}
 
-            const radiusValue = this.themeManager!.borderRadius[varName];
+            const radiusValue =
+                this.themeManager!.borderRadius[
+                    varName as keyof ThemeBorderRadius
+                ];
             if (radiusValue !== undefined) {
                 return `${radiusValue}px`;
             }
@@ -171,6 +175,14 @@ export class Style {
         return this.bgColor(this.themeManager!.color(key));
     }
 
+    themeBgImage(key: keyof ThemeAnimations["ripple"]): this {
+        if (!this.hasTheme()) {
+            console.warn("No theme attached to this Style instance");
+            return this;
+        }
+        return this.bgImage(this.themeManager!.ripple(key));
+    }
+
     themeBorderColor(key: keyof ThemeColors): this {
         if (!this.hasTheme()) {
             console.warn("No theme attached to this Style instance");
@@ -193,18 +205,7 @@ export class Style {
             return this;
         }
 
-        const typography: any = this.themeManager!.typography;
-        const style = typography[group]?.[size];
-
-        if (!style) {
-            console.warn(`Typography "${group}.${size}" not found`);
-            return this;
-        }
-
-        this.addRule("font-family", style.fontFamily);
-        this.addRule("font-weight", style.fontWeight);
-        this.addRule("font-size", style.fontSize);
-        this.addRule("line-height", style.lineHeight);
+        this.addRule("font", this.themeManager!.font(group, size));
 
         return this;
     }
@@ -897,7 +898,16 @@ export class Style {
     }
 
     css(styles: Record<string, string>): this {
-        Object.assign(this.rules, styles);
+        const toKebabCase = (str: string) =>
+            str.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+
+        const transformed: Record<string, string> = {};
+
+        for (const key in styles) {
+            transformed[toKebabCase(key)] = styles[key];
+        }
+
+        Object.assign(this.rules, transformed);
         return this;
     }
 

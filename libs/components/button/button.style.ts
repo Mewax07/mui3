@@ -81,7 +81,7 @@ const type_config: Record<ButtonType, (s: Style) => Style> = {
     },
     [ButtonType.TEXT]: (s) => {
         return s
-            .bg("transparent")
+            .bgColor("transparent")
             .themeColor("primary")
             .hover((hover) => {
                 hover.bgColor(
@@ -91,7 +91,7 @@ const type_config: Record<ButtonType, (s: Style) => Style> = {
     },
     [ButtonType.OUTLINED]: (s) => {
         return s
-            .bg("transparent")
+            .bgColor("transparent")
             .themeColor("on_surface_variant")
             .themeBorderColor("outline_variant")
             .hover((hover) => {
@@ -114,7 +114,6 @@ const border_config: Record<ButtonBorderType, (s: Style) => Style> = {
 const btn = new Style(".btn")
     .withTheme(darkTheme)
     // @theme-start
-    .themeBgColor("primary")
     .themeColor("on_primary")
     .themeFont("label", "lg")
     .themeRadius("sm")
@@ -133,9 +132,9 @@ const btn = new Style(".btn")
     .display("flex")
     .alignItems("center")
     .justifyContent("center")
+    .bgColor("transparent")
     .bgRepeat("no-repeat")
-    .bgPosition("center")
-    .apply();
+    .bgPosition("center");
 
 Object.entries(type_config).forEach(([type, applyFn]) => {
     applyFn(
@@ -159,4 +158,12 @@ btn.disabled((s) => {
     s.pointerEvents("none")
         .color("color-mix(in srgb, $on_surface$ 38%, transparent)")
         .bgColor("color-mix(in srgb, $on_surface$ 10%, transparent)");
-}).apply();
+});
+
+btn.active((s) => {
+    s.themeBgImage("circle").animation(
+        "button-ripple .5s cubic-bezier(.38, 1.21, .22, 1) forwards",
+    );
+});
+
+btn.apply();

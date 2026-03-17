@@ -85,7 +85,6 @@ export interface ThemeBorderRadius {
     xl_inc: number;
     xxl: number;
     full: number;
-    [key: string]: number;
 }
 
 export interface ThemeTransitions {
@@ -93,7 +92,6 @@ export interface ThemeTransitions {
         fast: string;
         normal: string;
         slow: string;
-        [key: string]: string;
     };
     timing: {
         linear: string;
@@ -101,8 +99,19 @@ export interface ThemeTransitions {
         easeIn: string;
         easeOut: string;
         easeInOut: string;
-        [key: string]: string;
     };
+}
+
+export type KeyframeDefinition = {
+    [step: string]: Record<string, string>;
+};
+
+export interface ThemeAnimations {
+    ripple: {
+        circle: string;
+        full: string;
+    };
+    keyframes: Record<string, KeyframeDefinition>;
 }
 
 export interface ThemeZIndex {
@@ -120,6 +129,7 @@ export interface Theme {
     typography: ThemeTypography;
     borderRadius: ThemeBorderRadius;
     transitions: ThemeTransitions;
+    animations: ThemeAnimations;
     zIndex: ThemeZIndex;
     custom?: Record<string, any>;
 }
@@ -306,6 +316,30 @@ export class ThemeManager {
                     easeInOut: "ease-in-out",
                 },
             },
+            animations: {
+                ripple: {
+                    circle: "radial-gradient(circle, color-mix(in srgb, currentColor 12%, transparent) 40%, transparent 41%)",
+                    full: "radial-gradient(circle, color-mix(in srgb, currentColor 12%, transparent) 100%, transparent 41%)",
+                },
+                keyframes: {
+                    buttonRipple: {
+                        "0%": {
+                            backgroundSize: "150%",
+                        },
+                        to: {
+                            backgroundSize: "250%",
+                        },
+                    },
+                    // "@keyframes button-ripple {\n\t0% {\n\t\tbackground-size: 150%;\n\t}\n\n\tto {\n\t\tbackground-size: 250%;\n\t}\n}",
+                    inputRipple: {
+                        to: {
+                            opacity: "1",
+                        },
+                    },
+                    // "@keyframes input-ripple {\n\tto {\n\t\topacity: 1;\n\t}\n}",
+                    // focus: "@keyframes focus {\n\tto {\n\t\touline-width: 3px;\n\t\toutline-color: red;\n\t}\n}",
+                },
+            },
             zIndex: {
                 dropdown: 1000,
                 sticky: 1020,
@@ -331,33 +365,24 @@ export class ThemeManager {
                 ...customTheme.borderRadius,
             },
             transitions: {
-                duration: {
-                    ...defaultTheme.transitions.duration,
-                    ...customTheme.transitions?.duration,
-                },
-                timing: {
-                    ...defaultTheme.transitions.timing,
-                    ...customTheme.transitions?.timing,
-                },
+                ...defaultTheme.transitions,
+                ...customTheme.transitions,
+            },
+            animations: {
+                ...defaultTheme.animations,
+                ...customTheme.animations,
             },
             zIndex: { ...defaultTheme.zIndex, ...customTheme.zIndex },
             custom: customTheme.custom || {},
         };
     }
 
-    color(key: string): string {
-        const keys = key.split(".");
-        let value: any = this.theme.colors;
+    color(key: keyof ThemeColors): string {
+        return `var(--color-${key})`;
+    }
 
-        for (const k of keys) {
-            value = value?.[k];
-            if (value === undefined) {
-                console.warn(`Color "${key}" not found in theme`);
-                return key;
-            }
-        }
-
-        return value;
+    colorAlpha(key: keyof ThemeColors, opacity: number): string {
+        return `color-mix(in srgb, var(--color-${key}) ${opacity * 100}%, transparent)`;
     }
 
     get colors(): ThemeColors {
@@ -405,6 +430,14 @@ export class ThemeManager {
 
     get transitions(): ThemeTransitions {
         return this.theme.transitions;
+    }
+
+    ripple(key: keyof ThemeAnimations["ripple"]): string {
+        return this.theme.animations.ripple[key] ?? key;
+    }
+
+    get animations(): ThemeAnimations {
+        return this.theme.animations;
     }
 
     z(key: keyof ThemeZIndex): number {
@@ -517,8 +550,8 @@ export class ThemeManager {
         return this;
     }
 
-    generateCSSVariables(): string {
-        let css = ":root {\n";
+    generateCSSVariables(scope = ":root"): string {
+        let css = `${scope} {\n`;
 
         // Colors
         const flattenColors = (obj: any, prefix = "color"): string => {
@@ -544,10 +577,36 @@ export class ThemeManager {
         return css;
     }
 
+    generateKeyframesCSS(): string {
+        let css = "";
+
+        const toKebab = (s: string) =>
+            s.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+
+        for (const [name, frames] of Object.entries(
+            this.theme.animations.keyframes,
+        )) {
+            css += `@keyframes ${toKebab(name)} {\n`;
+
+            for (const [step, styles] of Object.entries(frames)) {
+                css += `  ${step} {\n`;
+                for (const [prop, value] of Object.entries(styles)) {
+                    css += `    ${toKebab(prop)}: ${value};\n`;
+                }
+                css += `  }\n`;
+            }
+
+            css += `}\n`;
+        }
+
+        return css;
+    }
+
     applyCSSVariables(): this {
         const style = document.createElement("style");
         style.setAttribute("data-theme-variables", "true");
-        style.textContent = this.generateCSSVariables();
+        style.textContent =
+            this.generateCSSVariables() + this.generateKeyframesCSS();
         document.head.appendChild(style);
         return this;
     }

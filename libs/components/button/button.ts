@@ -15,6 +15,7 @@ interface ButtonProps {
 
 interface ButtonSlots {
     icon: { type: "icon" };
+    link: { type: "text" };
 }
 
 export interface Button
@@ -52,8 +53,12 @@ export class Button extends Component {
     @placeholder("icon")
     private iconSlot?: Html;
 
-    constructor() {
+    @placeholder("text")
+    private linkSlot?: string;
+
+    constructor(label: string) {
         super("button");
+        this.label = label;
     }
 
     protected template(): Html {
@@ -66,6 +71,14 @@ export class Button extends Component {
         const icon = this.getPlaceholder("icon");
         if (icon) {
             container.append(icon);
+        }
+
+        const link = this.getPlaceholder("link");
+        if (link) {
+            console.log(link.getText());
+            container.on("click", () => {
+                window.open(link.getText(), "_about")?.focus();
+            });
         }
 
         container.append(new Html("span").text(this.label));
