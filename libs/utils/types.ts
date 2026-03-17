@@ -1,3 +1,5 @@
+import { Html } from "./html";
+
 export type PropertyType =
     | "string"
     | "number"
@@ -16,6 +18,10 @@ export interface PropertyMetadata {
 }
 
 export type PlaceholderType = "text" | "icon" | "html" | "component";
+
+export interface PlaceholderValue<T = Html> {
+    content: T | null;
+}
 
 export interface PlaceholderMetadata {
     name: string;
@@ -87,36 +93,12 @@ type EnumMethods<K extends string, T, Self> = {
     [P in K as `set${Capitalize<P>}`]: (value: T) => Self;
 };
 
-type TextPlaceholderMethods<K extends string, Self> = {
-    [P in K as `add${Capitalize<P>}`]: (content: string) => Self;
+type SlotMethods<K extends string, ContentType, Self> = {
+    [P in K as `set${Capitalize<P>}Slot`]: (content: ContentType) => Self;
 } & {
-    [P in K as `set${Capitalize<P>}`]: (content: string | string[]) => Self;
+    [P in K as `clear${Capitalize<P>}Slot`]: () => Self;
 } & {
-    [P in K as `clear${Capitalize<P>}`]: () => Self;
-};
-
-type IconPlaceholderMethods<K extends string, Self> = {
-    [P in K as `add${Capitalize<P>}`]: (icon: string) => Self;
-} & {
-    [P in K as `set${Capitalize<P>}`]: (icon: string | string[]) => Self;
-} & {
-    [P in K as `clear${Capitalize<P>}`]: () => Self;
-};
-
-type HtmlPlaceholderMethods<K extends string, Self> = {
-    [P in K as `add${Capitalize<P>}`]: (content: any) => Self;
-} & {
-    [P in K as `set${Capitalize<P>}`]: (content: any | any[]) => Self;
-} & {
-    [P in K as `clear${Capitalize<P>}`]: () => Self;
-};
-
-type ComponentPlaceholderMethods<K extends string, C, Self> = {
-    [P in K as `add${Capitalize<P>}`]: (component: C) => Self;
-} & {
-    [P in K as `set${Capitalize<P>}`]: (component: C | C[]) => Self;
-} & {
-    [P in K as `clear${Capitalize<P>}`]: () => Self;
+    [P in K as `has${Capitalize<P>}Slot`]: () => boolean;
 };
 
 export type WithPropMethods<T, Self> = UnionToIntersection<
@@ -142,13 +124,13 @@ export type WithEnumMethod<K extends string, E, Self> = EnumMethods<K, E, Self>;
 export type WithPlaceholderMethods<T, Self> = UnionToIntersection<
     {
         [K in keyof T]: T[K] extends { type: "text" }
-            ? TextPlaceholderMethods<K & string, Self>
+            ? SlotMethods<K & string, string, Self>
             : T[K] extends { type: "icon" }
-              ? IconPlaceholderMethods<K & string, Self>
+              ? SlotMethods<K & string, string, Self>
               : T[K] extends { type: "html" }
-                ? HtmlPlaceholderMethods<K & string, Self>
+                ? SlotMethods<K & string, Html, Self>
                 : T[K] extends { type: "component"; componentType: infer C }
-                  ? ComponentPlaceholderMethods<K & string, C, Self>
+                  ? SlotMethods<K & string, C, Self>
                   : unknown;
     }[keyof T]
 >;

@@ -176,43 +176,36 @@ export function prop(type: PropertyType | "enum", options?: any) {
 
 export function placeholder(
     type: PlaceholderType,
-    options?: {
-        multiple?: boolean;
-        defaultContent?: any;
-    },
+    options?: { defaultContent?: any },
 ) {
     return function (target: any, propertyKey: string) {
         const metadata = getComponentMetadata(target.constructor);
+        const name = propertyKey.replace(/Slot$/, "");
 
-        const placeholderName = propertyKey.replace(/Slot$/, "");
-
-        const placeholderMetadata: PlaceholderMetadata = {
-            name: placeholderName,
+        metadata.placeholders.set(name, {
+            name,
             type,
-            multiple: options?.multiple,
-            defaultContent: options?.defaultContent,
-        };
-
-        metadata.placeholders.set(placeholderName, placeholderMetadata);
+            defaultContent: options?.defaultContent ?? null,
+        });
 
         const proto = target.constructor.prototype;
-        const capitalized = capitalize(placeholderName);
+        const cap = capitalize(name);
 
-        if (!proto[`add${capitalized}Slot`]) {
-            proto[`add${capitalized}Slot`] = function (content: any) {
-                return this.addSlot(placeholderName, content, type);
+        if (!proto[`set${cap}Slot`]) {
+            proto[`set${cap}Slot`] = function (content: any) {
+                return this.setPlaceholder(name, content, type);
             };
         }
 
-        if (!proto[`set${capitalized}Slot`]) {
-            proto[`set${capitalized}Slot`] = function (content: any) {
-                return this.setSlot(placeholderName, content, type);
+        if (!proto[`clear${cap}Slot`]) {
+            proto[`clear${cap}Slot`] = function () {
+                return this.clearPlaceholder(name);
             };
         }
 
-        if (!proto[`clear${capitalized}Slot`]) {
-            proto[`clear${capitalized}Slot`] = function () {
-                return this.clearSlot(placeholderName);
+        if (!proto[`has${cap}Slot`]) {
+            proto[`has${cap}Slot`] = function () {
+                return this.hasPlaceholder(name);
             };
         }
     };

@@ -1,7 +1,11 @@
 import { Component } from "../../utils/component";
 import { placeholder, prop } from "../../utils/decorator";
 import { Html } from "../../utils/html";
-import { WithEnumMethod, WithPropMethods } from "../../utils/types";
+import {
+    WithEnumMethod,
+    WithPlaceholderMethods,
+    WithPropMethods,
+} from "../../utils/types";
 import { ButtonBorderType, ButtonSize, ButtonType } from "./button.style";
 
 interface ButtonProps {
@@ -9,12 +13,17 @@ interface ButtonProps {
     disabled: boolean;
 }
 
+interface ButtonSlots {
+    icon: { type: "icon" };
+}
+
 export interface Button
     extends
         WithPropMethods<ButtonProps, Button>,
         WithEnumMethod<"type", ButtonType, Button>,
         WithEnumMethod<"size", ButtonSize, Button>,
-        WithEnumMethod<"border", ButtonBorderType, Button> {}
+        WithEnumMethod<"border", ButtonBorderType, Button>,
+        WithPlaceholderMethods<ButtonSlots, Button> {}
 
 export class Button extends Component {
     @prop("enum", {
@@ -52,14 +61,14 @@ export class Button extends Component {
             .class("btn")
             .dataset("type", this.type)
             .dataset("size", this.size)
-            .dataset("border", this.border)
-            .text(this.label);
+            .dataset("border", this.border);
 
-        const iconContainer = new Html("span")
-            .class("btn__icon")
-            .attr("data-slot", "icon");
+        const icon = this.getPlaceholder("icon");
+        if (icon) {
+            container.append(icon);
+        }
 
-        container.append(iconContainer);
+        container.append(new Html("span").text(this.label));
 
         if (this.disabled) {
             container.elm.disabled = true;
