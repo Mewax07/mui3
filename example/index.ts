@@ -9,6 +9,7 @@ import {
     ButtonType,
     darkTheme,
     Html,
+    Style,
 } from "../libs";
 import { Shape } from "../libs/components/shape/shape";
 
@@ -95,11 +96,47 @@ const icons_buttons = [
 const shapes = [
     new Shape("circle").mount(), // good
     new Shape("square").mount(), // good
+    new Shape("slanted").mount(), // good
+    new Shape("arch").mount(), // good
 ];
 
 new Html()
-    .appendMany(buttons)
-    .appendMany(icons_buttons)
-    .appendMany(shapes)
+    .class("content")
+    // .append(new Html().class("preview").appendMany(buttons))
+    // .append(new Html().class("preview").appendMany(icons_buttons))
+    .append(new Html().class("preview").appendMany(shapes))
     // .append(new AppsBar().setIconSlot("arrow_back").mount())
     .appendTo(document.body);
+
+new Style("body")
+    .m(0)
+    .p(0)
+    .w(100, "vw")
+    .h(100, "vh")
+    .child(".content", (s) => {
+        return s
+            .display("flex")
+            .alignItems("center")
+            .justifyContent("center")
+            .flexDirection("column")
+            .gap(50)
+            .w(100, "%")
+            .h(100, "%");
+    })
+    .child(".preview", (s) => {
+        return s
+            .display("flex")
+            .alignItems("center")
+            .justifyContent("center")
+            .minH(400)
+            .w(60, "%")
+            .bgColor("#201F23")
+            .bgImage(
+                "linear-gradient(#363438 1px, transparent 1px), linear-gradient(to right, #2B292D 1px, transparent 1px)",
+            )
+            .bgSize("50px 50px")
+            .overflow("auto")
+            .borderRadius(15)
+            .gap(50);
+    })
+    .apply();
