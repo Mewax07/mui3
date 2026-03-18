@@ -11,73 +11,57 @@ import {
 darkTheme.applyCSSVariables();
 
 const variant_buttons = [
-    new Button().setLabel("Elevated").setType(ButtonType.ELEVATED).mount(),
-    new Button().setLabel("Filled").setType(ButtonType.FILLED).mount(),
-    new Button().setLabel("Tonal").setType(ButtonType.TONAL).mount(),
-    new Button().setLabel("Text").setType(ButtonType.TEXT).mount(),
-    new Button().setLabel("Outlined").setType(ButtonType.OUTLINED).mount(),
+    new Button("Elevated").setType(ButtonType.ELEVATED).mount(),
+    new Button("Filled").setType(ButtonType.FILLED).mount(),
+    new Button("Tonal").setType(ButtonType.TONAL).mount(),
+    new Button("Text").setType(ButtonType.TEXT).mount(),
+    new Button("Outlined").setType(ButtonType.OUTLINED).mount(),
 ];
 
 const size_buttons = [
-    new Button()
-        .setLabel("Extra small")
+    new Button("Extra small")
         .setType(ButtonType.TONAL)
         .setSize(ButtonSize.EXTRA_SMALL)
         .mount(),
-    new Button()
-        .setLabel("Small")
+    new Button("Small")
         .setType(ButtonType.TONAL)
         .setSize(ButtonSize.SMALL)
         .mount(),
-    new Button()
-        .setLabel("Medium")
+    new Button("Medium")
         .setType(ButtonType.TONAL)
         .setSize(ButtonSize.MEDIUM)
         .mount(),
-    new Button()
-        .setLabel("Large")
+    new Button("Large")
         .setType(ButtonType.TONAL)
         .setSize(ButtonSize.LARGE)
         .mount(),
-    new Button()
-        .setLabel("Extra large")
+    new Button("Extra large")
         .setType(ButtonType.TONAL)
         .setSize(ButtonSize.EXTRA_LARGE)
         .mount(),
 ];
 
 const rounded_buttons = [
-    new Button()
-        .setLabel("Round")
+    new Button("Round")
         .setType(ButtonType.OUTLINED)
         .setBorder(ButtonBorderType.ROUND)
         .mount(),
-    new Button()
-        .setLabel("Square")
+    new Button("Square")
         .setType(ButtonType.OUTLINED)
         .setBorder(ButtonBorderType.SQUARE)
         .mount(),
 ];
 
 const disabled_buttons = [
-    new Button()
-        .setLabel("Disabled")
-        .setType(ButtonType.FILLED)
-        .setDisabled()
-        .mount(),
+    new Button("Disabled").setType(ButtonType.FILLED).setDisabled().mount(),
 ];
 
 const with_icon_buttons = [
-    new Button()
-        .setLabel("Button")
-        .setType(ButtonType.FILLED)
-        .setIconSlot("edit")
-        .mount(),
+    new Button("Button").setType(ButtonType.FILLED).setIconSlot("edit").mount(),
 ];
 
 const link_buttons = [
-    new Button()
-        .setLabel("View reference")
+    new Button("View reference")
         .setType(ButtonType.OUTLINED)
         .setLinkSlot("https://m3.material.io/components/buttons/overview")
         .mount(),

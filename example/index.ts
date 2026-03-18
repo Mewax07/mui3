@@ -93,8 +93,8 @@ const icons_buttons = [
 ];
 
 const shapes = [
-    new Shape("circle").mount(), // @ts-ignore skip case
-    new Shape("square").mount(), // @ts-ignore skip case
+    new Shape("circle").mount(), // good
+    new Shape("square").mount(), // good
 ];
 
 new Html()

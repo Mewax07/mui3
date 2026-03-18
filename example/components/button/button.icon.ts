@@ -11,78 +11,59 @@ import {
 darkTheme.applyCSSVariables();
 
 const variant_buttons = [
-    new ButtonIcon()
-        .setIcon("volume_up")
-        .setType(ButtonIconType.FILLED)
-        .mount(),
-    new ButtonIcon().setIcon("volume_up").setType(ButtonIconType.TONAL).mount(),
-    new ButtonIcon()
-        .setIcon("volume_up")
-        .setType(ButtonIconType.OUTLINED)
-        .mount(),
-    new ButtonIcon()
-        .setIcon("volume_up")
-        .setType(ButtonIconType.STANDARD)
-        .mount(),
+    new ButtonIcon("volume_up").setType(ButtonIconType.FILLED).mount(),
+    new ButtonIcon("volume_up").setType(ButtonIconType.TONAL).mount(),
+    new ButtonIcon("volume_up").setType(ButtonIconType.OUTLINED).mount(),
+    new ButtonIcon("volume_up").setType(ButtonIconType.STANDARD).mount(),
 ];
 
 const size_buttons = [
-    new ButtonIcon()
-        .setIcon("play_arrow")
+    new ButtonIcon("play_arrow")
         .setType(ButtonIconType.TONAL)
         .setSize(ButtonIconSize.EXTRA_SMALL)
         .mount(),
-    new ButtonIcon()
-        .setIcon("play_arrow")
+    new ButtonIcon("play_arrow")
         .setType(ButtonIconType.TONAL)
         .setSize(ButtonIconSize.SMALL)
         .mount(),
-    new ButtonIcon()
-        .setIcon("play_arrow")
+    new ButtonIcon("play_arrow")
         .setType(ButtonIconType.TONAL)
         .setSize(ButtonIconSize.MEDIUM)
         .mount(),
-    new ButtonIcon()
-        .setIcon("play_arrow")
+    new ButtonIcon("play_arrow")
         .setType(ButtonIconType.TONAL)
         .setSize(ButtonIconSize.LARGE)
         .mount(),
-    new ButtonIcon()
-        .setIcon("play_arrow")
+    new ButtonIcon("play_arrow")
         .setType(ButtonIconType.TONAL)
         .setSize(ButtonIconSize.EXTRA_LARGE)
         .mount(),
 ];
 
 const width_buttons = [
-    new ButtonIcon()
-        .setIcon("more_vert")
+    new ButtonIcon("more_vert")
         .setType(ButtonIconType.OUTLINED)
         .setBorder(ButtonIconBorderType.NARROW)
         .mount(),
-    new ButtonIcon()
-        .setIcon("more_vert")
+    new ButtonIcon("more_vert")
         .setType(ButtonIconType.OUTLINED)
         .setBorder(ButtonIconBorderType.DEFAULT)
         .mount(),
-    new ButtonIcon()
-        .setIcon("more_vert")
+    new ButtonIcon("more_vert")
         .setType(ButtonIconType.OUTLINED)
         .setBorder(ButtonIconBorderType.WIDE)
         .mount(),
 ];
 
 const disabled_buttons = [
-    new ButtonIcon()
-        .setIcon("volume_off")
+    new ButtonIcon("volume_off")
         .setType(ButtonIconType.STANDARD)
         .setDisabled()
         .mount(),
 ];
 
 const link_buttons = [
-    new ButtonIcon()
-        .setIcon("home")
+    new ButtonIcon("home")
         .setType(ButtonIconType.TONAL)
         .setLinkSlot("https://m3.material.io/components/icon-buttons/overview")
         .mount(),
