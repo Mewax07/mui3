@@ -20,7 +20,8 @@ export class Shape extends Component {
     protected template(): Html {
         const container = new Html()
             .class("shape")
-            .dataset("shape", this.shape);
+            .dataset("shape", this.shape)
+            .append(new Html());
 
         return container;
     }

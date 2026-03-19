@@ -93,18 +93,28 @@ const icons_buttons = [
         .mount(),
 ];
 
-const shapes = [
+const shapes_line1 = [
     new Shape("circle").mount(), // good
     new Shape("square").mount(), // good
     new Shape("slanted").mount(), // good
     new Shape("arch").mount(), // good
+    new Shape("semicircle").mount(), // good
+];
+
+const shapes_line2 = [
+    new Shape("oval").mount(), // good
+    new Shape("pil").mount(), // good
+    new Shape("triangle").mount(), // good
+    new Shape("arrow").mount(), // good
+    new Shape("fan").mount(), // good
 ];
 
 new Html()
     .class("content")
     // .append(new Html().class("preview").appendMany(buttons))
     // .append(new Html().class("preview").appendMany(icons_buttons))
-    .append(new Html().class("preview").appendMany(shapes))
+    .append(new Html().class("preview").appendMany(shapes_line1))
+    .append(new Html().class("preview").appendMany(shapes_line2))
     // .append(new AppsBar().setIconSlot("arrow_back").mount())
     .appendTo(document.body);
 
@@ -129,7 +139,7 @@ new Style("body")
             .alignItems("center")
             .justifyContent("center")
             .minH(400)
-            .w(60, "%")
+            .w(80, "%")
             .bgColor("#201F23")
             .bgImage(
                 "linear-gradient(#363438 1px, transparent 1px), linear-gradient(to right, #2B292D 1px, transparent 1px)",
