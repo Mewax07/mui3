@@ -4,7 +4,7 @@ import { ShapeType } from "./shape.style";
 
 export type ShapeValue = `${ShapeType}`;
 
-export interface Button extends WithEnumMethod<"shape", ShapeType, Button> {}
+export interface Shape extends WithEnumMethod<"shape", ShapeType, Shape> {}
 
 export class Shape extends Component {
     @prop("enum", {

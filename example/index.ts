@@ -109,12 +109,57 @@ const shapes_line2 = [
     new Shape("fan").mount(), // good
 ];
 
+const shapes_line3 = [
+    new Shape("diamond").mount(), // good
+    new Shape("clamshell").mount(), // good
+    new Shape("pentagon").mount(), // good
+    new Shape("gem").mount(), // good
+    new Shape("very_sunny").mount(), // good
+];
+
+const shapes_line4 = [
+    new Shape("sunny").mount(), // good
+    new Shape("4_sided_cookie").mount(), // good
+    new Shape("6_sided_cookie").mount(), // good
+    new Shape("7_sided_cookie").mount(), // good
+    new Shape("9_sided_cookie").mount(), // good
+];
+
+const shapes_line5 = [
+    new Shape("12_sided_cookie").mount(), // good
+    new Shape("4_leaf").mount(), // good
+    new Shape("8_leaf").mount(), // good
+    new Shape("brust").mount(), // good
+    new Shape("soft_brust").mount(), // good
+];
+
+const shapes_line6 = [
+    new Shape("boom").mount(), // good
+    new Shape("soft_boom").mount(), // good
+    new Shape("flower").mount(), // good
+    new Shape("puffy").mount(), // good
+    new Shape("puffy_diamond").mount(), // good
+];
+
+const shapes_line7 = [
+    new Shape("ghost_ish").mount(), // good
+    new Shape("pixel_circle").mount(), // good
+    new Shape("pixel_triangle").mount(), // good
+    new Shape("bun").mount(), // good
+    new Shape("heart").mount(), // good
+];
+
 new Html()
     .class("content")
     // .append(new Html().class("preview").appendMany(buttons))
     // .append(new Html().class("preview").appendMany(icons_buttons))
     .append(new Html().class("preview").appendMany(shapes_line1))
     .append(new Html().class("preview").appendMany(shapes_line2))
+    .append(new Html().class("preview").appendMany(shapes_line3))
+    .append(new Html().class("preview").appendMany(shapes_line4))
+    .append(new Html().class("preview").appendMany(shapes_line5))
+    .append(new Html().class("preview").appendMany(shapes_line6))
+    .append(new Html().class("preview").appendMany(shapes_line7))
     // .append(new AppsBar().setIconSlot("arrow_back").mount())
     .appendTo(document.body);
 
@@ -129,7 +174,7 @@ new Style("body")
             .alignItems("center")
             .justifyContent("center")
             .flexDirection("column")
-            .gap(50)
+            .gap(5)
             .w(100, "%")
             .h(100, "%");
     })
@@ -138,8 +183,7 @@ new Style("body")
             .display("flex")
             .alignItems("center")
             .justifyContent("center")
-            .minH(400)
-            .w(80, "%")
+            .p(4, "%")
             .bgColor("#201F23")
             .bgImage(
                 "linear-gradient(#363438 1px, transparent 1px), linear-gradient(to right, #2B292D 1px, transparent 1px)",
@@ -147,6 +191,6 @@ new Style("body")
             .bgSize("50px 50px")
             .overflow("auto")
             .borderRadius(15)
-            .gap(50);
+            .gap(15);
     })
     .apply();

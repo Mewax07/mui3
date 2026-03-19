@@ -3,6 +3,7 @@ import { darkTheme } from "../utils/theme";
 
 export * from "./bar";
 export * from "./button";
+export * from "./shape";
 
 new Style("body")
     .withTheme(darkTheme)
