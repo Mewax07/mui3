@@ -9,6 +9,7 @@ import {
     ButtonType,
     darkTheme,
     Html,
+    ShapeType,
     Style,
 } from "../libs";
 import { Shape } from "../libs/components/shape/shape";
@@ -117,6 +118,7 @@ const shapes_line3 = [
     new Shape("very_sunny").mount(), // good
 ];
 
+/*
 const shapes_line4 = [
     new Shape("sunny").mount(), // good
     new Shape("4_sided_cookie").mount(), // good
@@ -148,18 +150,22 @@ const shapes_line7 = [
     new Shape("bun").mount(), // good
     new Shape("heart").mount(), // good
 ];
+*/
+
+const s = new Shape("circle");
 
 new Html()
     .class("content")
     // .append(new Html().class("preview").appendMany(buttons))
     // .append(new Html().class("preview").appendMany(icons_buttons))
+    .append(new Html().class("preview").append(s.mount()))
     .append(new Html().class("preview").appendMany(shapes_line1))
     .append(new Html().class("preview").appendMany(shapes_line2))
     .append(new Html().class("preview").appendMany(shapes_line3))
-    .append(new Html().class("preview").appendMany(shapes_line4))
-    .append(new Html().class("preview").appendMany(shapes_line5))
-    .append(new Html().class("preview").appendMany(shapes_line6))
-    .append(new Html().class("preview").appendMany(shapes_line7))
+    // .append(new Html().class("preview").appendMany(shapes_line4))
+    // .append(new Html().class("preview").appendMany(shapes_line5))
+    // .append(new Html().class("preview").appendMany(shapes_line6))
+    // .append(new Html().class("preview").appendMany(shapes_line7))
     // .append(new AppsBar().setIconSlot("arrow_back").mount())
     .appendTo(document.body);
 
@@ -194,3 +200,5 @@ new Style("body")
             .gap(15);
     })
     .apply();
+
+await s.bounce();
