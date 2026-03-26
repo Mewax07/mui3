@@ -1,8 +1,10 @@
 import { Component, Html, prop } from "../../utils";
 import { WithEnumMethod, WithPropMethods } from "../../utils/types";
-import { AnyButtonConfig, buttonFactory } from "./config";
-import { ButtonGroupSize, ButtonGroupType } from "./group.button.icon";
+import { AnyButtonConfig, buttonFactory, IButton } from "./config";
+import { ButtonGroupSize, ButtonGroupType } from "./group.button.style";
 import { ButtonIcon } from "./icon.button";
+
+export type ButtonGroupValue = `${ButtonGroupType}`;
 
 interface ButtonGroupProps {
     icon: boolean;
@@ -28,8 +30,9 @@ export class ButtonGroup extends Component {
 
     private buttonList: Map<string, Component> = new Map();
 
-    constructor() {
+    constructor(type: ButtonGroupValue = ButtonGroupType.STANDARD) {
         super();
+        this.type = type as ButtonGroupType;
     }
 
     protected template(): Html {
@@ -50,12 +53,16 @@ export class ButtonGroup extends Component {
         // @ts-expect-error Trust the process bro
         const btn = new instance();
 
+        let btn_clone: any | null = null;
         if (config.kind === "button") {
-            // @ts-ignore force cast for icon
-            (btn as Button).setLabel(config.label);
+            btn_clone = btn as IButton;
+            btn_clone.setLabel(config.label).setSize(this.size);
         } else if (config.kind === "icon") {
-            // @ts-ignore force cast for icon
-            (btn as ButtonIcon).setIcon(config.icon).setIconType(config.type);
+            btn_clone = btn as ButtonIcon;
+            btn_clone
+                .setIcon(config.icon)
+                .setSize(this.size)
+                .setIconType(config.type);
         }
 
         if (config.disabled) {

@@ -3,15 +3,15 @@ import { ButtonGroup } from "../libs/components/button/group.button";
 
 darkTheme.applyCSSVariables();
 
-const groupButton = new ButtonGroup()
+const groupStandardButton = new ButtonGroup()
     .addButton("bluetooth", {
         kind: "icon",
         icon: "bluetooth",
         type: "rounded",
     })
-    .addButton("clock", {
+    .addButton("alarm", {
         kind: "icon",
-        icon: "homelock",
+        icon: "alarm",
         type: "rounded",
     })
     .addButton("home", {
@@ -20,9 +20,28 @@ const groupButton = new ButtonGroup()
         type: "rounded",
     });
 
+const groupConnectedButton = new ButtonGroup("connected")
+    .addButton("value1", {
+        kind: "button",
+        label: "8 oz",
+    })
+    .addButton("value2", {
+        kind: "button",
+        label: "12 oz",
+    })
+    .addButton("value3", {
+        kind: "button",
+        label: "16 oz",
+    })
+    .addButton("value4", {
+        kind: "button",
+        label: "20 oz",
+    });
+
 new Html()
     .class("content")
-    .append(new Html().class("preview").append(groupButton.mount()))
+    .append(new Html().class("preview").append(groupStandardButton.mount()))
+    .append(new Html().class("preview").append(groupConnectedButton.mount()))
     .appendTo(document.body);
 
 new Style("body")

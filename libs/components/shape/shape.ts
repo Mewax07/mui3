@@ -17,7 +17,7 @@ export class Shape extends Component {
 
     private svg: Svg | null = null;
 
-    constructor(shape: ShapeValue) {
+    constructor(shape: ShapeValue = ShapeType.CIRCLE) {
         super();
         this.shape = shape as ShapeType;
     }

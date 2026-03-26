@@ -853,6 +853,16 @@ export class Style {
         return this;
     }
 
+    first(callback: (style: Style) => void): this {
+        this.pseudoStates.set(":first-child", this.buildPseudoRules(callback));
+        return this;
+    }
+
+    last(callback: (style: Style) => void): this {
+        this.pseudoStates.set(":last-child", this.buildPseudoRules(callback));
+        return this;
+    }
+
     // CHILD SELECTORS
     child(selector: string, callback: (style: Style) => void): this {
         const resolved = this.buildPseudoRules(callback);

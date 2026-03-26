@@ -2,6 +2,20 @@ import { Component } from "../../utils";
 import { Button } from "./button";
 import { ButtonIcon } from "./icon.button";
 
+/// Shared style (Yes I wrote comment like rust and ??!)
+
+export const BasicSize = {
+    EXTRA_SMALL: "xs",
+    SMALL: "sm",
+    MEDIUM: "md",
+    LARGE: "lg",
+    EXTRA_LARGE: "xl",
+} as const;
+
+export type BasicSize = (typeof BasicSize)[keyof typeof BasicSize];
+
+/// Important Config Interface/Types
+
 export interface IButton extends Component {}
 
 export interface BaseConfig {

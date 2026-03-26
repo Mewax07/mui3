@@ -1,7 +1,3 @@
-import { Component } from "../../utils";
-import { Button } from "./button";
-import { ButtonIcon } from "./icon.button";
-
 export { Button } from "./button";
 export { ButtonSize, ButtonType, ButtonBorderType } from "./button.style";
 
@@ -11,3 +7,6 @@ export {
     ButtonIconType,
     ButtonIconBorderType,
 } from "./icon.button.style";
+
+export { ButtonGroup } from "./group.button";
+export { ButtonGroupSize, ButtonGroupType } from "./group.button.style";
