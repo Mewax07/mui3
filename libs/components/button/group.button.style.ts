@@ -19,17 +19,22 @@ const type_config: Record<ButtonGroupType, (s: Style) => Style> = {
     },
     [ButtonGroupType.CONNECTED]: (s) => {
         return s
-            .first((s) => {
-                s.css({
-                    borderTopLeftRadius: "28px",
-                    borderBottomLeftRadius: "28px",
-                });
+            .themeRadius("full")
+            .overflow("hidden")
+            .child("button[data-size='xs']", (s) => {
+                return s.themeRadius("xs");
             })
-            .last((s) => {
-                s.css({
-                    borderTopRightRadius: "28px",
-                    borderBottomRightRadius: "28px",
-                });
+            .child("button[data-size='sm']", (s) => {
+                return s.themeRadius("sm");
+            })
+            .child("button[data-size='md']", (s) => {
+                return s.themeRadius("sm");
+            })
+            .child("button[data-size='lg']", (s) => {
+                return s.themeRadius("xxl");
+            })
+            .child("button[data-size='xl']", (s) => {
+                return s.themeRadius("xxl");
             });
     },
 };
@@ -62,7 +67,7 @@ const gbtn = new Style(".gbtn")
 
 Object.entries(type_config).forEach(([type, applyFn]) => {
     applyFn(
-        new Style(`.gbtn[data-type="${type}"] button`).withTheme(darkTheme),
+        new Style(`.gbtn[data-type="${type}"]`).withTheme(darkTheme),
     ).apply();
 });
 

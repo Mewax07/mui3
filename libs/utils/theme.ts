@@ -300,7 +300,7 @@ export class ThemeManager {
                 xl: 28,
                 xl_inc: 32,
                 xxl: 48,
-                full: 9999,
+                full: 100,
             },
             transitions: {
                 duration: {

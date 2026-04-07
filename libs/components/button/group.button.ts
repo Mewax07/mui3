@@ -11,11 +11,11 @@ interface ButtonGroupProps {
     disabled: boolean;
 }
 
-export interface Button
+export interface ButtonGroup
     extends
-        WithPropMethods<ButtonGroupProps, Button>,
-        WithEnumMethod<"type", ButtonGroupType, Button>,
-        WithEnumMethod<"size", ButtonGroupSize, Button> {}
+        WithPropMethods<ButtonGroupProps, ButtonGroup>,
+        WithEnumMethod<"type", ButtonGroupType, ButtonGroup>,
+        WithEnumMethod<"size", ButtonGroupSize, ButtonGroup> {}
 
 export class ButtonGroup extends Component {
     @prop("enum", {

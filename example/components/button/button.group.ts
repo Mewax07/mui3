@@ -1,6 +1,7 @@
 import {
     ButtonGroup,
     ButtonGroupSize,
+    ButtonGroupType,
     darkTheme,
     Html,
     Style,
@@ -10,6 +11,7 @@ darkTheme.applyCSSVariables();
 
 const variants_buttons = [
     new ButtonGroup()
+        .setType(ButtonGroupType.CONNECTED)
         .setSize(ButtonGroupSize.EXTRA_SMALL)
         .addButton("start", {
             kind: "button",
@@ -25,7 +27,8 @@ const variants_buttons = [
         })
         .mount(),
     new ButtonGroup()
-        .setSize(ButtonGroupSize.EXTRA_SMALL)
+        .setType(ButtonGroupType.CONNECTED)
+        .setSize(ButtonGroupSize.SMALL)
         .addButton("start", {
             kind: "button",
             label: "Start",
@@ -40,7 +43,8 @@ const variants_buttons = [
         })
         .mount(),
     new ButtonGroup()
-        .setSize(ButtonGroupSize.EXTRA_SMALL)
+        .setType(ButtonGroupType.CONNECTED)
+        .setSize(ButtonGroupSize.MEDIUM)
         .addButton("start", {
             kind: "button",
             label: "Start",
